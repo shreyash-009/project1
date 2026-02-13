@@ -46,7 +46,7 @@ $compatible_types = get_compatible_blood_types($blood_type);
 $placeholders = implode("','", $compatible_types);
 
 // Fetch emergency requests matching the donor's blood type (including hospital contact)
-$sql = "SELECT r.*, h.name AS hospital_name, h.city, h.phone as hospital_phone
+$sql = "SELECT r.*, h.name AS hospital_name, h.city, h.phone as hospital_phone, 'Hospital' as request_type
         FROM requests r 
         JOIN hospitals h ON r.hospital_id = h.id
         WHERE r.blood_group IN ('$placeholders')
@@ -54,6 +54,95 @@ $sql = "SELECT r.*, h.name AS hospital_name, h.city, h.phone as hospital_phone
         ORDER BY r.request_date DESC";
 
 $result = $conn->query($sql);
+
+// Create receivers table if it doesn't exist
+$receivers_sql = "CREATE TABLE IF NOT EXISTS receivers (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    city VARCHAR(50) NOT NULL,
+    phone VARCHAR(15) NOT NULL,
+    email VARCHAR(100),
+    blood_group_needed VARCHAR(5) NOT NULL,
+    registration_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    last_request_date DATETIME,
+    total_requests_fulfilled INT DEFAULT 0
+)";
+
+$blood_requests_sql = "CREATE TABLE IF NOT EXISTS blood_requests (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    receiver_id INT NOT NULL,
+    blood_group VARCHAR(5) NOT NULL,
+    quantity INT NOT NULL,
+    city VARCHAR(50) NOT NULL,
+    request_date DATETIME DEFAULT CURRENT_TIMESTAMP,
+    request_status VARCHAR(20) DEFAULT 'Pending',
+    fulfilled_by_donor_id INT,
+    fulfillment_date DATETIME,
+    FOREIGN KEY (receiver_id) REFERENCES receivers(id),
+    INDEX idx_receiver (receiver_id),
+    INDEX idx_status (request_status)
+)";
+
+$conn->query($receivers_sql);
+$conn->query($blood_requests_sql);
+
+// Create notifications table
+$notifications_sql = "CREATE TABLE IF NOT EXISTS donor_notifications (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    donor_id INT NOT NULL,
+    request_id INT,
+    request_type VARCHAR(20),
+    blood_group VARCHAR(5),
+    requester_name VARCHAR(100),
+    message TEXT,
+    notification_date DATETIME DEFAULT CURRENT_TIMESTAMP,
+    is_read TINYINT DEFAULT 0,
+    INDEX idx_donor (donor_id),
+    INDEX idx_read (is_read)
+)";
+
+$conn->query($notifications_sql);
+
+// Function to create notification
+function createNotification($donor_id, $request_id, $request_type, $blood_group, $requester_name) {
+    global $conn;
+    $message = "A " . $request_type . " needs blood type " . $blood_group . " from " . $requester_name;
+    $sql = "INSERT INTO donor_notifications (donor_id, request_id, request_type, blood_group, requester_name, message)
+            VALUES ('$donor_id', '$request_id', '$request_type', '$blood_group', '$requester_name')";
+    return $conn->query($sql);
+}
+
+// Check for unread notifications
+$donor_id = $_SESSION['donor_id'] ?? 0;
+$notifications_query = "SELECT * FROM donor_notifications WHERE donor_id = $donor_id AND is_read = 0 ORDER BY notification_date DESC";
+$notifications_result = $conn->query($notifications_query);
+$unread_count = $notifications_result ? $notifications_result->num_rows : 0;
+$receiver_sql = "SELECT br.*, rec.name AS receiver_name, rec.city, rec.phone as receiver_phone, 'Receiver' as request_type
+        FROM blood_requests br
+        JOIN receivers rec ON br.receiver_id = rec.id
+        WHERE br.blood_group IN ('$placeholders')
+        AND br.request_status='Pending'
+        ORDER BY br.request_date DESC";
+
+$receiver_result = $conn->query($receiver_sql);
+
+// Merge both results
+$all_requests = [];
+if ($result) {
+    while ($row = $result->fetch_assoc()) {
+        $all_requests[] = $row;
+    }
+}
+if ($receiver_result) {
+    while ($row = $receiver_result->fetch_assoc()) {
+        $all_requests[] = $row;
+    }
+}
+
+// Sort by date
+usort($all_requests, function($a, $b) {
+    return strtotime($b['request_date']) - strtotime($a['request_date']);
+});
 
 // Function to get compatible blood types
 function get_compatible_blood_types($blood_type) {
@@ -211,6 +300,68 @@ function get_compatible_blood_types($blood_type) {
         .cta-button:hover {
             background: #a93226;
         }
+        
+        .notification-banner {
+            background: linear-gradient(135deg, #f39c12, #e67e22);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            animation: slideDown 0.5s ease-out;
+        }
+        
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .notification-banner .icon {
+            font-size: 32px;
+        }
+        
+        .notification-banner .content {
+            flex: 1;
+        }
+        
+        .notification-banner h3 {
+            margin: 0 0 5px 0;
+            font-size: 18px;
+        }
+        
+        .notification-banner p {
+            margin: 0;
+            font-size: 14px;
+            opacity: 0.95;
+        }
+        
+        .notification-banner .count {
+            background: rgba(255,255,255,0.3);
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 16px;
+            white-space: nowrap;
+        }
+        
+        .notification-item {
+            background: #fff3cd;
+            border-left: 4px solid #f39c12;
+            padding: 12px;
+            margin: 8px 0;
+            border-radius: 5px;
+            font-size: 14px;
+            color: #333;
+        }
     </style>
 </head>
 <body style="padding-top: 140px; background: #f8f9fa;">
@@ -226,18 +377,57 @@ function get_compatible_blood_types($blood_type) {
             </div>
         </div>
         
+        <!-- Notification Banner -->
+        <?php if (!empty($all_requests)): ?>
+            <div class="notification-banner">
+                <div class="icon">🔔</div>
+                <div class="content">
+                    <h3>You Can Help!</h3>
+                    <p>There are urgent blood requests that match your blood type. Someone needs you right now!</p>
+                </div>
+                <div class="count"><?php echo count($all_requests); ?> Request<?php echo count($all_requests) !== 1 ? 's' : ''; ?></div>
+            </div>
+            
+            <!-- Recent Unread Notifications -->
+            <?php if ($unread_count > 0): ?>
+                <div style="background: #e8f4f8; padding: 15px; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid #2980b9;">
+                    <strong style="color: #2980b9;">📬 You have <?php echo $unread_count; ?> new notification<?php echo $unread_count !== 1 ? 's' : ''; ?>:</strong>
+                    <?php 
+                    $notifications_result->data_seek(0);
+                    while ($notif = $notifications_result->fetch_assoc()): 
+                    ?>
+                        <div class="notification-item">
+                            ✅ <?php echo htmlspecialchars($notif['message']); ?> - 
+                            <small style="color: #666;"><?php echo date('M d, H:i', strtotime($notif['notification_date'])); ?></small>
+                        </div>
+                    <?php endwhile; ?>
+                </div>
+            <?php endif; ?>
+        <?php else: ?>
+            <div style="background: #d4edda; color: #155724; padding: 20px; border-radius: 8px; margin-bottom: 30px; border: 1px solid #c3e6cb; text-align: center;">
+                <h3 style="margin-top: 0;">✓ All Clear</h3>
+                <p>No emergency blood requests at the moment. We'll notify you when someone needs your blood type!</p>
+            </div>
+        <?php endif; ?>
+        
         <!-- Emergency Alerts -->
         <div class="alert-section">
             <h3>🚨 Active Emergency Requests</h3>
             
             <?php
-            if ($result->num_rows > 0) {
-                while($row = $result->fetch_assoc()) {
+            if (!empty($all_requests)) {
+                foreach($all_requests as $row) {
                     $is_urgent = time() - strtotime($row['request_date']) < 3600; // Less than 1 hour old
+                    $request_name = ($row['request_type'] === 'Hospital') ? $row['hospital_name'] : $row['receiver_name'];
+                    $contact_phone = ($row['request_type'] === 'Hospital') ? $row['hospital_phone'] : $row['receiver_phone'];
+                    $badge_color = ($row['request_type'] === 'Receiver') ? '#2980b9' : '#c0392b';
                     ?>
                     <div class="emergency-card">
                         <div class="hospital-name">
-                            <?php echo htmlspecialchars($row['hospital_name']); ?>
+                            <?php echo htmlspecialchars($request_name); ?>
+                            <span style="font-size: 12px; background: <?php echo $badge_color; ?>; color: white; padding: 3px 8px; border-radius: 3px; margin-left: 10px;">
+                                <?php echo $row['request_type']; ?>
+                            </span>
                             <?php if($is_urgent): ?>
                                 <span class="urgent-label">⚡ URGENT</span>
                             <?php endif; ?>
@@ -258,7 +448,7 @@ function get_compatible_blood_types($blood_type) {
                             </div>
                             <div class="detail-item">
                                 <div class="detail-label">Contact Number</div>
-                                <div class="detail-value"><?php echo htmlspecialchars($row['hospital_phone'] ?? 'N/A'); ?></div>
+                                <div class="detail-value"><?php echo htmlspecialchars($contact_phone ?? 'N/A'); ?></div>
                             </div>
                             <div class="detail-item">
                                 <div class="detail-label">Request Posted</div>
@@ -266,7 +456,7 @@ function get_compatible_blood_types($blood_type) {
                             </div>
                         </div>
                         
-                        <button class="cta-button" onclick="alert('Thank you for your interest! Please contact the hospital directly at the provided number.')">
+                        <button class="cta-button" onclick="alert('Thank you for your interest! Please contact <?php echo addslashes($request_name); ?> directly at the provided number.')">
                             I Can Help
                         </button>
                     </div>
@@ -276,7 +466,7 @@ function get_compatible_blood_types($blood_type) {
                 ?>
                 <div class="no-alerts">
                     <h2>✓ No Emergency Requests Right Now</h2>
-                    <p>Good news! There are currently no critical blood requests matching your blood type. Keep checking back as new requests may appear.</p>
+                    <p>Good news! There are currently no critical blood requests (from hospitals or receivers) matching your blood type. Keep checking back as new requests may appear.</p>
                     <p style="margin-top: 15px; color: #666;">Consider registering at a blood donation camp to help others in need.</p>
                 </div>
                 <?php

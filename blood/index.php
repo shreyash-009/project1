@@ -1,8 +1,8 @@
 <?php
 session_start();
 
-// Check if user is logged in and is a regular user (blood donation is for users, not hospitals)
-if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] !== 'user') {
+// Check if user is logged in and is a donor (blood donation is for donors, not hospitals)
+if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] !== 'donor') {
     header("Location: ../homepage.php");
     exit();
 }

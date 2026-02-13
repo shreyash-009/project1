@@ -12,7 +12,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // Set session variables
         $_SESSION['user_id'] = md5($email); // Simple unique ID
         $_SESSION['user_email'] = $email;
-        $_SESSION['user_role'] = $role; // 'user' or 'hospital'
+        $_SESSION['user_role'] = $role; // 'donor', 'hospital', or 'receiver'
         
         // Redirect to homepage
         header("Location: homepage.php");
@@ -154,9 +154,11 @@ function isLoggedIn() {
 
         <div class="role-group">
             <label>Login As:</label>
-            <input type="radio" name="role" value="user" checked> User
+            <input type="radio" name="role" value="donor" checked> Donor
             &nbsp;&nbsp;
             <input type="radio" name="role" value="hospital"> Hospital
+            &nbsp;&nbsp;
+            <input type="radio" name="role" value="receiver"> Receiver
         </div>
 
         <button type="submit" class="login-btn">Login</button>

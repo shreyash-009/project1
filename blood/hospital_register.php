@@ -9,6 +9,39 @@ if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] !== 'hospital') {
 
 include 'db.php';
 
+// Create notification table
+$notifications_sql = "CREATE TABLE IF NOT EXISTS donor_notifications (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    donor_id INT NOT NULL,
+    request_id INT,
+    request_type VARCHAR(20),
+    blood_group VARCHAR(5),
+    requester_name VARCHAR(100),
+    message TEXT,
+    notification_date DATETIME DEFAULT CURRENT_TIMESTAMP,
+    is_read TINYINT DEFAULT 0,
+    INDEX idx_donor (donor_id),
+    INDEX idx_read (is_read)
+)";
+
+$conn->query($notifications_sql);
+
+// Helper function to get compatible blood types
+function get_compatible_donors_for_blood_type($blood_type) {
+    $compatibility = [
+        'O+' => ['O+', 'A+', 'B+', 'AB+'],
+        'O-' => ['O-', 'O+', 'A-', 'A+', 'B-', 'B+', 'AB-', 'AB+'],
+        'A+' => ['A+', 'AB+'],
+        'A-' => ['A-', 'A+', 'AB-', 'AB+'],
+        'B+' => ['B+', 'AB+'],
+        'B-' => ['B-', 'B+', 'AB-', 'AB+'],
+        'AB+' => ['AB+'],
+        'AB-' => ['AB-', 'AB+']
+    ];
+    
+    return isset($compatibility[$blood_type]) ? $compatibility[$blood_type] : [$blood_type];
+}
+
 // Track the registered hospital ID
 $hospital_id = 0;
 $success_msg = "";
@@ -40,11 +73,38 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $quantity = $_POST['quantity'];
         $city = $_POST['city'];
 
-        $sql = "INSERT INTO requests (hospital_id, blood_group, quantity, city)
-                VALUES ('$hospital_id', '$blood_group', '$quantity', '$city')";
+        $sql = "INSERT INTO requests (hospital_id, blood_group, quantity, city, request_date)
+                VALUES ('$hospital_id', '$blood_group', '$quantity', '$city', NOW())";
 
         if ($conn->query($sql)) {
-            $success_msg = "Emergency blood request submitted successfully!";
+            // Get the request ID
+            $request_id = $conn->insert_id;
+            
+            // Get hospital name
+            $hospital_name_query = "SELECT name FROM hospitals WHERE id = $hospital_id";
+            $hospital_name_result = $conn->query($hospital_name_query);
+            $hospital_data = $hospital_name_result->fetch_assoc();
+            $hospital_name = $hospital_data['name'] ?? 'A Hospital';
+            
+            // Find compatible donors and notify them
+            $compatible_types = get_compatible_donors_for_blood_type($blood_group);
+            $placeholders = implode("','", $compatible_types);
+            
+            $donors_query = "SELECT id FROM donors WHERE blood_group IN ('$placeholders')";
+            $donors_result = $conn->query($donors_query);
+            
+            // Create notifications for all compatible donors
+            if ($donors_result && $donors_result->num_rows > 0) {
+                while ($donor_row = $donors_result->fetch_assoc()) {
+                    $donor_id = $donor_row['id'];
+                    $message = "🏥 EMERGENCY: Hospital " . $hospital_name . " needs blood type $blood_group in $city";
+                    $notif_sql = "INSERT INTO donor_notifications (donor_id, request_id, request_type, blood_group, requester_name, message)
+                                VALUES ('$donor_id', '$request_id', 'Hospital', '$blood_group', '$hospital_name', '$message')";
+                    $conn->query($notif_sql);
+                }
+            }
+            
+            $success_msg = "Emergency blood request submitted successfully! Donors have been notified.";
         } else {
             die("Error: " . $conn->error);
         }

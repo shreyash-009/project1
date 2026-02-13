@@ -28,21 +28,21 @@ $pathPrefix = (strpos($_SERVER['PHP_SELF'], '/blood/') !== false || strpos($_SER
             
             <!-- Show role-based options only when logged in -->
             <?php if($isLoggedIn): ?>
-                <!-- Regular User Options -->
-                <?php if($userRole === 'user'): ?>
+                <!-- Donor Options -->
+                <?php if($userRole === 'donor'): ?>
                     <!-- Donor Dashboard -->
                     <li><a href="<?php echo $pathPrefix; ?>blood/donor_dashboard.php" <?php echo (basename($_SERVER['PHP_SELF']) == 'donor_dashboard.php') ? 'class="active"' : ''; ?>>Dashboard</a></li>
                     
-                    <!-- Blood Donation - For users -->
+                    <!-- Blood Donation - For donors -->
                     <li><a href="<?php echo $pathPrefix; ?>blood/index.php" <?php echo (strpos($_SERVER['PHP_SELF'], 'blood') !== false && strpos($_SERVER['PHP_SELF'], 'hospital') === false && basename($_SERVER['PHP_SELF']) !== 'map.php' && basename($_SERVER['PHP_SELF']) !== 'emergency_requests.php' && basename($_SERVER['PHP_SELF']) !== 'donor_dashboard.php') ? 'class="active"' : ''; ?>>Blood Donation</a></li>
                     
-                    <!-- Emergency Requests - For users -->
+                    <!-- Emergency Requests - For donors -->
                     <li><a href="<?php echo $pathPrefix; ?>blood/emergency_requests.php" <?php echo (basename($_SERVER['PHP_SELF']) == 'emergency_requests.php') ? 'class="active"' : ''; ?>>Emergency</a></li>
                     
-                    <!-- Waste Management - For users -->
+                    <!-- Waste Management - For donors -->
                     <li><a href="<?php echo $pathPrefix; ?>waste.php" <?php echo (basename($_SERVER['PHP_SELF']) == 'waste.php') ? 'class="active"' : ''; ?>>Waste Management</a></li>
                     
-                    <!-- Disease Awareness - For users -->
+                    <!-- Disease Awareness - For donors -->
                     <li><a href="<?php echo $pathPrefix; ?>disease.php" <?php echo (basename($_SERVER['PHP_SELF']) == 'disease.php') ? 'class="active"' : ''; ?>>Disease Awareness</a></li>
                     
                     <!-- Map for donor registration -->
@@ -62,6 +62,12 @@ $pathPrefix = (strpos($_SERVER['PHP_SELF'], '/blood/') !== false || strpos($_SER
                     
                     <!-- Map -->
                     <li><a href="<?php echo $pathPrefix; ?>blood/map.php" <?php echo (basename($_SERVER['PHP_SELF']) == 'map.php') ? 'class="active"' : ''; ?>>Map</a></li>
+                <?php endif; ?>
+                
+                <!-- Receiver User Options -->
+                <?php if($userRole === 'receiver'): ?>
+                    <!-- Receiver Register -->
+                    <li><a href="<?php echo $pathPrefix; ?>blood/receiver_register.php" <?php echo (basename($_SERVER['PHP_SELF']) == 'receiver_register.php') ? 'class="active"' : ''; ?>>Receiver Register</a></li>
                 <?php endif; ?>
             <?php endif; ?>
             

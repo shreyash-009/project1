@@ -2,7 +2,7 @@
 session_start();
 
 // Check if user is logged in and is a regular user
-if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] !== 'user') {
+if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] !== 'donor') {
     header("Location: homepage.php");
     exit();
 }

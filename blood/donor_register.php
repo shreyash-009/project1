@@ -5,7 +5,7 @@ session_start();
 if (!isset($_SESSION['user_id'])) {
     header("Location: ../login.php");
     exit();
-} elseif ($_SESSION['user_role'] !== 'user') {
+} elseif ($_SESSION['user_role'] !== 'donor') {
     header("Location: ../homepage.php");
     exit();
 }

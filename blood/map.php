@@ -15,9 +15,9 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-// ------------------- Handle Donor Form Submission (Users only) -------------------
+// ------------------- Handle Donor Form Submission (Donors only) -------------------
 $message = "";
-if(isset($_POST['register']) && $userRole === 'user') {
+if(isset($_POST['register']) && $userRole === 'donor') {
     $name = $_POST['name'];
     $city = $_POST['city'];
 
@@ -85,8 +85,8 @@ while($row = $result->fetch_assoc()) {
 
 <?php if($message) echo "<div class='message'>$message</div>"; ?>
 
-<!-- ================= Donor Registration Form (Users Only) ================= -->
-<?php if($userRole === 'user'): ?>
+<!-- ================= Donor Registration Form (Donors Only) ================= -->
+<?php if($userRole === 'donor'): ?>
 <form method="post">
     <input type="text" name="name" placeholder="Donor Name" required>
     <input type="text" name="city" placeholder="City (e.g., Banepa)" required>
