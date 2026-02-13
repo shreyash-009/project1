@@ -1,0 +1,126 @@
+<?php
+session_start();
+
+// Check if user is logged in and is a regular user
+if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] !== 'user') {
+    header("Location: homepage.php");
+    exit();
+}
+?>
+<html>
+    <head>
+        <link rel="stylesheet" href="main.css">
+    </head>
+    <body>
+        <?php include 'navbar.php'; ?>
+ <section style="
+  padding: -300px;
+  background-color: #f8fbff;
+  display: flex;
+  justify-content: center;
+">
+  <p style="
+    max-width: 900px;
+    font-size: 16px;
+    line-height: 1.8;
+    color: #444;
+    background-color: #ffffff;
+    padding: 30px;
+    border-radius: 14px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+    text-align: justify;
+  ">
+    Improper waste management and lack of public awareness play a major role in the spread of diseases.
+    When waste is not segregated, collected, or disposed of properly, it becomes a breeding ground for
+    bacteria, viruses, and disease-carrying pests such as mosquitoes, flies, and rodents. Accumulated
+    garbage and unmanaged waste can contaminate air, soil, and water, increasing the risk of diseases
+    like dengue, cholera, typhoid, and respiratory infections. Creating awareness about proper waste
+    management is essential to prevent disease outbreaks and ensure a healthier environment.
+  </p>
+</section>
+
+<section class="waste-section" id="waste">
+    <div class="waste-container">
+        
+
+        <!-- Image Side -->
+        <div class="waste-image">
+            <img src="ww.jpg" alt="Waste Management Image">
+        </div>
+
+        <!-- Content Box Side -->
+        <div class="waste-content-box">
+            <h2>Types of Waste</h2>
+
+            <div class="waste-box">
+                <h3> Biodegradable Waste</h3>
+                <p>
+                    Biodegradable waste decomposes naturally through microorganisms.
+                    Examples include food scraps, leaves, paper, and organic waste.
+                    Composting helps reduce landfill waste and enrich soil.
+                </p>
+            </div>
+
+            <div class="waste-box">
+                <h3>Non-Biodegradable Waste</h3>
+                <p>
+                    Non-biodegradable waste does not break down easily and remains
+                    in the environment for a long time. Examples include plastic,
+                    glass, metal, and electronic waste. Recycling is essential.
+                </p>
+            </div>
+
+            <div class="waste-box">
+                <h3>Sharp / Brittle Waste</h3>
+                <p>
+                    Sharp or brittle waste includes broken glass, needles, blades,
+                    and medical sharps. These must be disposed of safely in
+                    puncture-proof containers to prevent injuries.
+                </p>
+            </div>
+
+        </div>
+    </div>
+</section>
+<!-- Waste Management Game Section -->
+<section class="game-section">
+  <div class="game-container">
+    <h2>Interactive Waste Management Game</h2>
+
+    <p class="game-description">
+      Learning waste management doesn't have to be boring!  
+      Our interactive game challenges you to correctly classify different types of waste into
+      biodegradable, non-biodegradable, and brittle categories.
+    </p>
+
+    <p class="game-description">
+      Test your knowledge, improve your environmental awareness, and help build a cleaner,
+      healthier community - one correct decision at a time.
+    </p>
+
+    <button class="start-btn">
+      <a href="waste game/index.html"
+   style="
+     display: inline-block;
+     margin-top: 25px;
+     padding: 14px 36px;
+     background: linear-gradient(135deg, #1f3c88, #3f72ff);
+     color: #ffffff;
+     text-decoration: none;
+     font-size: 16px;
+     font-weight: 600;
+     border-radius: 30px;
+     box-shadow: 0 6px 16px rgba(63, 114, 255, 0.35);
+     transition: transform 0.3s ease, box-shadow 0.3s ease;
+   ">
+   Start Playing
+</a>
+
+    </button>
+  </div>
+</section>
+
+
+    
+</body>
+</html>

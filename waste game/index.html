@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>♻️Waste Sorting Game</title>
+  <link rel="stylesheet" href="../main.css">
+</head>
+<body>
+
+  
+  <div class="container">
+    <h1>♻️Waste Sorting Game</h1>
+
+    <div id="score-board">
+      Score: <span id="score">0</span>
+    </div>
+<div id="game-area">
+  <div id="item-area">
+    <p id="item-name">Loading...</p>
+  </div>
+
+  <div id="dustbins">
+    <div class="dustbin" data-category="Biodegradable"><span>Biodegradable</span></div>
+    <div class="dustbin" data-category="Non-biodegradable"><span>Non-biodegradable</span></div>
+    <div class="dustbin" data-category="Brittle"><span>Brittle</span></div>
+  </div>
+
+  <!-- Move feedback lower -->
+  <div id="feedback-area">
+    <p id="feedback"></p>
+  </div>
+</div>
+
+
+    <div id="game-over" style="display:none;">
+      <h2>🎉 Game Over!</h2>
+      <p id="final-score"></p>
+      <p id="correct-count"></p>
+      <button id="play-again">Play Again</button>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+  
+</body>
+</html>

@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>SAS Sign Up</title>
+
+<style>
+    body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background: linear-gradient(135deg, #1e3c72, #2a5298);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+    }
+
+    .signup-container {
+        background: rgba(255, 255, 255, 0.85);
+        padding: 40px;
+        width: 370px;
+        border-radius: 12px;
+        box-shadow: 0 8px 25px rgba(0,0,0,0.25);
+        text-align: center;
+        backdrop-filter: blur(8px);
+    }
+
+    .signup-container h2 {
+        color: #1e3c72;
+        margin-bottom: 25px;
+    }
+
+    .input-group {
+        margin-bottom: 18px;
+        text-align: left;
+    }
+
+    .input-group label {
+        font-weight: bold;
+        color: #1e3c72;
+        font-size: 14px;
+    }
+
+    .input-group input {
+        width: 100%;
+        padding: 10px;
+        margin-top: 5px;
+        border-radius: 6px;
+        border: 1px solid #ccc;
+        outline: none;
+        transition: 0.3s;
+    }
+
+    .input-group input:focus {
+        border-color: #2a5298;
+        box-shadow: 0 0 5px rgba(42,82,152,0.5);
+    }
+
+    .signup-btn {
+        width: 100%;
+        padding: 10px;
+        background-color: #1e3c72;
+        border: none;
+        color: white;
+        font-size: 16px;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: 0.3s;
+        margin-top: 5px;
+    }
+
+    .signup-btn:hover {
+        background-color: #2a5298;
+    }
+
+    .login-link {
+        margin-top: 15px;
+        font-size: 14px;
+    }
+
+    .login-link a {
+        color: #1e3c72;
+        text-decoration: none;
+        font-weight: bold;
+    }
+
+    .login-link a:hover {
+        text-decoration: underline;
+    }
+</style>
+</head>
+
+<body>
+
+<div class="signup-container">
+    <h2>Create Account</h2>
+
+    <form>
+        <div class="input-group">
+            <label>Full Name</label>
+            <input type="text" placeholder="Enter your full name" required>
+        </div>
+
+        <div class="input-group">
+            <label>Email or Phone Number</label>
+            <input type="text" placeholder="Enter email or phone number" required>
+        </div>
+
+        <div class="input-group">
+            <label>Password</label>
+            <input type="password" placeholder="Create password" required>
+        </div>
+
+        <div class="input-group">
+            <label>Confirm Password</label>
+            <input type="password" placeholder="Confirm password" required>
+        </div>
+
+        <button type="submit" class="signup-btn">Sign Up</button>
+    </form>
+
+    <div class="login-link">
+        Already have an account? <a href="login.php">Login</a>
+    </div>
+</div>
+
+</body>
+</html>

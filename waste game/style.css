@@ -1,0 +1,181 @@
+/* ----- Body & Background ----- */
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: linear-gradient(to top, #87ceeb 0%, #e0f7fa 70%);
+  position: relative;
+  overflow-x: hidden;
+}
+
+body::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 140px;
+  background: linear-gradient(to top, #4caf50 0%, #81c784 100%);
+  z-index: -1;
+  border-top-left-radius: 50% 20%;
+  border-top-right-radius: 50% 20%;
+}
+
+/* ----- Container ----- */
+.container {
+  background-color: rgba(0,0,0,0.5);
+  padding: 30px 40px;
+  border-radius: 15px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+  max-width: 600px;
+  width: 95%;
+  text-align: center;
+}
+
+/* ----- Scoreboard ----- */
+#score-board {
+  font-size: 1.3em;
+  margin-bottom: 20px;
+}
+
+/* ----- Item Card ----- */
+#item-name {
+  background-color: rgba(255,255,255,0.1);
+  padding: 15px;
+  border-radius: 10px;
+  font-size: 1.2em;
+  cursor: grab;
+  display: inline-block;
+}
+
+/* ----- Dustbins ----- */
+#dustbins {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 40px;
+  gap: 40px;
+}
+
+/* Generic dustbin style */
+.dustbin {
+  width: 120px;
+  height: 150px;
+  border-radius: 15px 15px 10px 10px;
+  position: relative;
+  cursor: pointer;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  transition: transform 0.2s, box-shadow 0.3s;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+}
+
+/* Biodegradable - Green */
+.dustbin[data-category="Biodegradable"] {
+  background: linear-gradient(to bottom, #4caf50 0%, #2e7d32 100%);
+}
+.dustbin[data-category="Biodegradable"]:hover {
+  background: linear-gradient(to bottom, #66bb6a 0%, #388e3c 100%);
+}
+
+/* Non-biodegradable - Red */
+.dustbin[data-category="Non-biodegradable"] {
+  background: linear-gradient(to bottom, #f44336 0%, #b71c1c 100%);
+}
+.dustbin[data-category="Non-biodegradable"]:hover {
+  background: linear-gradient(to bottom, #ef5350 0%, #c62828 100%);
+}
+
+/* Brittle - Orange */
+.dustbin[data-category="Brittle"] {
+  background: linear-gradient(to bottom, #ff9800 0%, #e65100 100%);
+}
+.dustbin[data-category="Brittle"]:hover {
+  background: linear-gradient(to bottom, #ffb74d 0%, #ef6c00 100%);
+}
+
+/* Dustbin opening (top lip) */
+.dustbin::before {
+  content: "";
+  position: absolute;
+  top: -15px;
+  width: 130%;
+  height: 18px;
+  background: rgba(0,0,0,0.2);
+  border-radius: 50%;
+}
+
+/* Dustbin label */
+.dustbin span {
+  position: absolute;
+  bottom: -30px;
+  font-weight: bold;
+  color: #fff;
+  text-shadow: 0 2px 5px rgba(0,0,0,0.5);
+  font-size: 0.9em;
+}
+
+
+/* Correct drop glow animation */
+.dustbin.correct-drop {
+  animation: correct-glow 0.5s;
+}
+
+@keyframes correct-glow {
+  0% { box-shadow: 0 8px 20px rgba(0,0,0,0.4); }
+  50% { box-shadow: 0 12px 25px rgba(0,255,0,0.8); }
+  100% { box-shadow: 0 8px 20px rgba(0,0,0,0.4); }
+}
+#feedback-area {
+  margin-top: 80px;  /* Push it down below the dustbins */
+  min-height: 60px;  /* Reserve space for multi-line messages */
+  text-align: center;
+  font-size: 1.1em;
+  white-space: pre-line; /* Keep line breaks */
+}
+
+/* Feedback colors are applied dynamically via JS */
+#feedback {
+  display: inline-block;
+  padding: 10px 15px;
+  border-radius: 8px;
+  background-color: rgba(255,255,255,0.1);
+  color: #fff;
+  max-width: 90%;
+}
+
+
+/* ----- Game Over Section ----- */
+#game-over {
+  display: none;
+  margin-top: 50px;
+  text-align: center;
+}
+
+#game-over h2 {
+  font-size: 1.5em;
+  margin-bottom: 15px;
+}
+
+#game-over p {
+  font-size: 1.2em;
+  margin: 5px 0;
+}
+
+#play-again {
+  margin-top: 20px;
+  padding: 10px 25px;
+  font-size: 1em;
+  border: none;
+  background-color: #ffce00;
+  color: #333;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+#play-again:hover {
+  background-color: #ffd633;
+}

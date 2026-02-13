@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Logging Out</title>
+
+<style>
+    body {
+        margin: 0;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: linear-gradient(135deg, #e3f2fd, #ffffff);
+        font-family: 'Segoe UI', Tahoma, sans-serif;
+    }
+
+    .box {
+        background: rgba(255, 255, 255, 0.85);
+        padding: 30px 40px;
+        border-radius: 15px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        text-align: center;
+    }
+
+    h2 {
+        color: #1f3c88;
+        margin-bottom: 10px;
+    }
+
+    p {
+        color: #555;
+        font-size: 15px;
+    }
+</style>
+</head>
+
+<body>
+
+<div class="box">
+    <h2>Logging you out...</h2>
+    <p>Please wait</p>
+</div>
+
+<script>
+    setTimeout(() => {
+        window.location.href = "login.html";
+    }, 1500);
+</script>
+
+</body>
+</html>

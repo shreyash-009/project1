@@ -1,0 +1,48 @@
+<?php
+session_start();
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HealthCare Hub | Blood & Awareness</title>
+    <link rel="stylesheet" href="main.css">
+</head>
+<body>
+    <?php include 'navbar.php'; ?>
+
+    <section class="hero">
+        <div class="hero-overlay">
+            <h1>Saving Lives, <br><span>One Step at a Time</span></h1>
+            <p>Join our mission to spread awareness and manage community health resources effectively.</p>
+            <div class="hero-btns">
+                <a href="blood/donor_register.php" class="btn-primary">Donate Now</a>
+            </div>
+        </div>
+    </section>
+
+    <main class="content-section">
+        <div class="container">
+            <div class="card-grid">
+                <div class="card">
+                    <h3>Blood Donation</h3>
+                    <p>Find local blood drives and learn about the donation process.</p>
+                </div>
+                <div class="card">
+                    <h3>Waste Management</h3>
+                    <p>Proper disposal of medical and household waste for a cleaner city.</p>
+                </div>
+                <div class="card">
+                    <h3>Disease Awareness</h3>
+                    <p>Stay updated with the latest health advisories and prevention tips.</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 HealthCare Hub. All rights reserved.</p>
+    </footer>
+</body>
+</html>

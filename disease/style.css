@@ -1,0 +1,126 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    background: #f4f6f9;
+}
+/* ===== Premium Glass Navbar ===== */
+
+.navbar {
+    position: sticky;
+    top: 0;
+    width: 100%;
+    padding: 15px -3px; 
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    background: rgba(0, 123, 255, 0.15);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+    z-index: 1000;
+}
+
+/* Navbar logo circle */
+.logo img {
+    height: 50px;               /* adjust as needed */
+    width: 50px;                /* equal height & width = circle */
+    border-radius: 50%;         /* makes it circular */
+    object-fit: cover;          /* ensures it fills the circle */
+    border: 2px solid #007bff; /* optional border */
+    transition: all 0.3s ease;
+}
+
+/* Hover effect */
+.logo img:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 15px rgba(0,123,255,0.6);
+}
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.logo span {
+    font-size: 18px;
+    font-weight: 700;
+    color: #007bff;
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 30px;
+}
+
+
+.nav-links li {
+    position: relative;
+}
+
+.nav-links a {
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 600;
+    color: #333;
+    padding: 8px 0;
+    transition: all 0.3s ease;
+}
+
+/* Hover underline animation */
+.nav-links a::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -5px;
+    width: 0%;
+    height: 3px;
+    background: linear-gradient(90deg, #007bff, #00c6ff);
+    border-radius: 5px;
+    transition: 0.4s ease;
+}
+
+.nav-links a:hover::after {
+    width: 100%;
+}
+
+.nav-links a:hover {
+    color: #007bff;
+    transform: translateY(-2px);
+}
+
+.container {
+    padding: 40px;
+}
+
+.card {
+    background: white;
+    padding: 20px;
+    margin: 15px 0;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+button {
+    padding: 10px 20px;
+    background: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.chatbox {
+    background: white;
+    padding: 20px;
+    height: 400px;
+    overflow-y: auto;
+    border-radius: 8px;
+    margin-bottom: 15px;
+}
+
+.user { color: blue; }
+.bot { color: green; }

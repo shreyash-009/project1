@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>SAS – Blood Donation</title>
+<link rel="stylesheet" href="../main.css">
+</head>
+
+<body style="
+    margin:0;
+    font-family:'Segoe UI', Tahoma, sans-serif;
+    padding-top:120px;
+    background: linear-gradient(180deg, #f8fbff, #ffffff);
+">
+
+
+<!-- ================= SAS MAIN NAVBAR ================= -->
+     <header>
+       <nav class="navbar" style="
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 2000;
+">
+
+            <div class="logo-container">
+                <a href="../homepage.html" class="logo-link">
+                    <img src="images.png" alt="Logo" class="logo-img">
+                    <span>HealthCare</span>
+                </a>
+            </div>
+            <ul class="nav-links">
+                <li><a href="../homepage.php" >Home</a></li>
+                <li><a href="index.html" class="active">Blood Donation</a></li>
+                <li><a href="../waste.html">Waste Management</a></li>
+                <li><a href="../disease.php">Disease Awareness</a></li>
+                <li><a href="../aboutus.html">About Us</a></li>
+            </ul>
+        </nav>
+    </header>
+
+
+<!-- ================= BLOOD DONATION NAVBAR ================= -->
+<nav style="
+    position: fixed;
+    top: 70px;
+    left: -5;
+    width: 100%;
+    background: linear-gradient(135deg, #b71c1c, #e53935);
+    padding: 10px 5%;
+    box-shadow: 0 4px 14px rgba(183,28,28,0.35);
+    z-index: 999;
+">
+
+    <ul style="
+        list-style: none;
+        display: flex;
+        gap: 22px;
+        margin: 0;
+        padding: 0;
+    ">
+        <li><a href="donor_register.php" style="color:white; text-decoration:none; font-weight:500;">Register Donor</a></li>
+        <li><a href="hospital_register.php" style="color:white; text-decoration:none; font-weight:500;">Hospital</a></li>
+        <li><a href="search.php" style="color:white; text-decoration:none; font-weight:500;">Search Donor</a></li>
+        <li><a href="emergency_requests.php" style="color:white; text-decoration:none; font-weight:500;">Emergency</a></li>
+        <li><a href="map.php" style="color:white; text-decoration:none; font-weight:500;">Map</a></li>
+    </ul>
+</nav>
+
+<!-- ================= HERO SECTION ================= -->
+<header id="home" style="
+    text-align: center;
+    padding: 90px 20px 60px;
+    background: linear-gradient(135deg, #e3f2fd, #ffffff);
+">
+    <h1 style="
+        font-size: 44px;
+        color: #1f3c88;
+        margin-bottom: 15px;
+        letter-spacing: 0.5px;
+    ">
+        Save Lives. Donate Blood.
+    </h1>
+    <p style="
+        font-size: 18px;
+        color: #555;
+        max-width: 650px;
+        margin: auto;
+        line-height: 1.7;
+    ">
+        Join the Blood Donor Portal to make a difference today!
+    </p>
+</header>
+
+<!-- ================= FEATURES SECTION ================= -->
+<section class="features" style="
+    display: flex;
+    gap: 25px;
+    padding: 60px 6%;
+    justify-content: center;
+    flex-wrap: wrap;
+">
+
+    <div class="feature-card" style="
+        background: white;
+        padding: 30px;
+        border-radius: 16px;
+        width: 280px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+        transition: transform 0.3s ease;
+        text-align: center;
+    ">
+        <h2 style="color:#c0392b; margin-bottom:10px;">Donate Blood</h2>
+        <p style="color:#555; line-height:1.6;">
+            Register as a donor and help those in need with just a few clicks.
+        </p>
+    </div>
+
+    <div class="feature-card" style="
+        background: white;
+        padding: 30px;
+        border-radius: 16px;
+        width: 280px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+        text-align: center;
+    ">
+        <h2 style="color:#c0392b; margin-bottom:10px;">Hospitals</h2>
+        <p style="color:#555; line-height:1.6;">
+            Hospitals can manage blood requests efficiently and instantly.
+        </p>
+    </div>
+
+    <div class="feature-card" style="
+        background: white;
+        padding: 30px;
+        border-radius: 16px;
+        width: 280px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+        text-align: center;
+    ">
+        <h2 style="color:#c0392b; margin-bottom:10px;">Find Donors</h2>
+        <p style="color:#555; line-height:1.6;">
+            Search donors by blood group and city to save lives quickly.
+        </p>
+    </div>
+
+</section>
+
+</body>
+</html>
